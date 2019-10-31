@@ -23,25 +23,31 @@ def load_data():
     
     x_train = x_train
     x_test = x_test
-    x_train = x_train / 255
-    x_test = x_test  / 255
-    x_test = x_test
+    x_train = x_train / 255 
+    x_test = x_test / 255 
+    x_test = np.random.normal(x_test)
     return (x_train, y_train), (x_test, y_test)
 
 (x_train, y_train), (x_test, y_test) = load_data()
 
-model = Sequential()
-model.add(Dense(input_dim=28*28, units=689, activation='sigmoid'))
-model.add(Dense(units=689, activation='sigmoid'))
-model.add(Dense(units=689, activation='sigmoid'))
+act_func = 'relu'
 
+model = Sequential()
+model.add(Dense(input_dim=28*28, units=1450, activation=act_func))
+model.add(Dense(units=1450, activation=act_func))
+model.add(Dense(units=1450, activation=act_func))
+
+#for i in range(10):
+#    model.add(Dense(units=1450, activation=act_func))
 
 
 model.add(Dense(units=10, activation='softmax'))
 
-model.compile(loss='mse', optimizer=SGD(lr=0.1), metrics=['accuracy'])
+model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 model.fit(x_train, y_train, batch_size=500, epochs=30)
 
+result = model.evaluate(x_train, y_train, batch_size=10000)
+print("Train Acc:", result[1])
 
 
 result = model.evaluate(x_test, y_test, batch_size=10000)
